@@ -1,0 +1,45 @@
+class Solution {
+    public int maxDistToClosest(int[] seats) {
+        int maxDis = -1;
+        int n = seats.length;
+        
+        // initial arrays to record the index of the closet person on the left and right
+        int[] disToLeft = new int[n];
+        int[] disToRight = new int[n];
+        Arrays.fill(disToLeft, -1);
+        Arrays.fill(disToRight, -1);
+   
+        // recording the index
+        int i = 0, lastPersonIndex = -1;
+        while(i < n){
+            if(seats[i] == 1)
+                lastPersonIndex = i;
+            else
+                disToLeft[i] = lastPersonIndex;
+            i++;
+        }
+        i = n-1;
+        lastPersonIndex = -1;
+        while(i >= 0){
+            if(seats[i] == 1)
+                lastPersonIndex = i;
+            else
+                disToRight[i] = lastPersonIndex;
+            i--;
+        }
+        
+        for(i = 0; i < n; i++){
+            // calculate the distance for both left and right if the seat is empty
+            if(seats[i] == 0){
+                int leftDis = (disToLeft[i] != -1) ? (i-disToLeft[i]) : Integer.MAX_VALUE;
+                int rightDis = (disToRight[i] != -1) ? (disToRight[i] - i) : Integer.MAX_VALUE;
+                int currMax = Math.min(leftDis, rightDis);
+                maxDis = Math.max(currMax, maxDis);
+            }
+        }
+        return maxDis;
+    }
+}
+// n is the number of the seats
+// Time: O(n)
+// Space: O(n)
